@@ -1,0 +1,42 @@
+{
+  "name": "grunt-2x-image-check",
+  "description": "Checks that you have retina versions of your images in a specified directory.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ChrisGrant/grunt-2x-image-check",
+  "author": {
+    "name": "Chris Grant",
+    "email": "christopherscottgrant@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ChrisGrant/grunt-2x-image-check.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ChrisGrant/grunt-2x-image-check/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/soonick/grunt-image-check/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "./node_modules/grunt-cli/bin/grunt test"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-eslint": "^0.6.0"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.0"
+  },
+  "dependencies": {
+    "image-size": "^0.3.2",
+    "minimatch": "^1.0.0",
+    "walk": "^2.3.3"
+  }
+}
