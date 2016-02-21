@@ -11,64 +11,70 @@
 
  module.exports = {
 
- 	check: function(opts) {
- 		this.success = true;
+  check: function(opts) {
+    this.success = true;
 
- 		var files = [];
+    var files = [];
 
- 		grunt.file.recurse(opts.src, function callback(abspath, rootdir, subdir, filename) {
- 			if (filename.indexOf(".") != 0) {
- 				files.push(abspath);
- 			}
- 		});
+    grunt.file.recurse(opts.src, function callback(abspath, rootdir, subdir, filename) {
+      if (filename.indexOf(".") != 0) {
+        files.push(abspath);
+      }
+    });
 
- 		for (var i = files.length - 1; i >= 0; i--) {
- 			var file = files[i];
+    for (var i = files.length - 1; i >= 0; i--) {
+      var file = files[i];
 
- 			if (file.indexOf('@2x') > -1) {
+      if (file.indexOf('.svg') > -1 ||
+          file.indexOf('.mp4') > -1 ||
+          file.indexOf('.ogg') > -1 ||
+          file.indexOf('.webm') > -1) {
+        break;
+      }
+      else if (file.indexOf('@2x') > -1) {
 
- 				var nonRetinaCounterpartName = file.replace('@2x', '');
+        var nonRetinaCounterpartName = file.replace('@2x', '');
 
- 				if (!grunt.file.exists(nonRetinaCounterpartName)) {
- 					grunt.log.error('Retina file ' + file + " doesn't have a @1x counterpart");
- 					this.success = false;
- 				}
- 				else {
- 					this.checkDimensions(file, nonRetinaCounterpartName, 2);
- 				}
- 			}
- 			else {
- 				var retinaCounterpartName = file.replace(".", "@2x.");
+        if (!grunt.file.exists(nonRetinaCounterpartName)) {
+          grunt.log.error('Retina file ' + file + " doesn't have a @1x counterpart");
+          this.success = false;
+        }
+        else {
+          this.checkDimensions(file, nonRetinaCounterpartName, 2);
+        }
+      }
+      else {
+        var retinaCounterpartName = file.replace(".", "@2x.");
 
- 				if (!grunt.file.exists(retinaCounterpartName)) {
- 					grunt.log.error('File ' + file + " doesn't have a @2x counterpart");
- 					this.success = false;
- 				}
- 				else {
-				// Check that if it does exist, it is the right size.
-				this.checkDimensions(file, retinaCounterpartName, 0.5);
-				}
-			}
-		}
+        if (!grunt.file.exists(retinaCounterpartName)) {
+          grunt.log.error('File ' + file + " doesn't have a @2x counterpart");
+          this.success = false;
+        }
+        else {
+        // Check that if it does exist, it is the right size.
+        this.checkDimensions(file, retinaCounterpartName, 0.5);
+        }
+      }
+    }
 
-		return this.success;
-	},
+    return this.success;
+  },
 
-	checkDimensions:function(sourceFile, comparisonFile, proportion) {
-		// Check that if it does exist, it is the right size.
-		var dimensions = this.getImageSize(sourceFile);
-		var counterpartDimensions = this.getImageSize(comparisonFile);
+  checkDimensions:function(sourceFile, comparisonFile, proportion) {
+    // Check that if it does exist, it is the right size.
+    var dimensions = this.getImageSize(sourceFile);
+    var counterpartDimensions = this.getImageSize(comparisonFile);
 
-		if (!counterpartDimensions || 
-		Math.round(counterpartDimensions.width * proportion) !== dimensions.width || 
-		Math.round(counterpartDimensions.height * proportion) !== dimensions.height) 
-		{
-			grunt.log.writeln("Wrong Dimensions for " + sourceFile + ". At @" + proportion +  "x, they should be " + Math.round(counterpartDimensions.width * proportion) + "x" + (Math.round(counterpartDimensions.height * proportion)) + "px, not " + dimensions.width + "x" + dimensions.height + "px");
-		}
-	},
+    if (!counterpartDimensions ||
+    Math.round(counterpartDimensions.width * proportion) !== dimensions.width ||
+    Math.round(counterpartDimensions.height * proportion) !== dimensions.height)
+    {
+      grunt.log.writeln("Wrong Dimensions for " + sourceFile + ". At @" + proportion +  "x, they should be " + Math.round(counterpartDimensions.width * proportion) + "x" + (Math.round(counterpartDimensions.height * proportion)) + "px, not " + dimensions.width + "x" + dimensions.height + "px");
+    }
+  },
 
-	getImageSize: function(path) {
-		return sizeOf(path);
-	}
+  getImageSize: function(path) {
+    return sizeOf(path);
+  }
 
 };
